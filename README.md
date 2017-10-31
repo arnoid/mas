@@ -1,20 +1,30 @@
-# mas [![NPM version](https://badge.fury.io/js/mas.svg)](https://npmjs.org/package/mas) [![Build Status](https://travis-ci.org/sergii%20arnaut/mas.svg?branch=master)](https://travis-ci.org/sergii%20arnaut/mas)
+# mas
 
-> mas
+> A Vue.js project
 
-## Installation
+## Build Setup
 
-```sh
-$ npm install --save mas
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+
+# run unit tests
+npm run unit
+
+# run e2e tests
+npm run e2e
+
+# run all tests
+npm test
 ```
 
-## Usage
-
-```js
-var mas = require('mas');
-mas();
-```
-
-## License
-
-MIT © [arnoid](https://github.com/arnoid)
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
