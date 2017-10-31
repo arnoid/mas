@@ -1,0 +1,25 @@
+{
+  "name": "mas",
+  "description": "",
+  "version": "0.1.0",
+  "homepage": "https://github.com/arnoid/mas",
+  "author": "arnoid (https://github.com/arnoid)",
+  "repository": "arnoid/mas",
+  "bugs": {
+    "url": "https://github.com/arnoid/mas/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "index.js"
+  },
+  "keywords": [
+    "mas"
+  ]
+}
