@@ -1,5 +1,7 @@
-import mutationsAuth from './mutationsAuth';
-
 export default {
-  ...mutationsAuth,
+  mutateUser(state, user) {
+    state.user = {
+      currentUser: user,
+    };
+  },
 };

@@ -1,8 +1,9 @@
 <template>
-  <div class="hello">
+  <div>
     <h1>Authorise</h1>
 
-    <div v-if="isAuthorisationInProgress">
+    <p v-if="authorisation.isAuthorisationError">{{ authorisation.errorMessage }}</p>
+    <div v-if="authorisation.isAuthorisationInProgress">
       <label>Authorisation in progress...</label>
     </div>
     <div v-else-if="isAuthorised()">
@@ -36,9 +37,7 @@
 </template>
 
 <script>
-  import { mapActions, mapState, mapMutations, mapGetters } from 'vuex';
-  import AuthController from '../controller/AuthController';
-
+  import { mapState, mapGetters, mapMutations } from 'vuex';
 
   export default {
     name: 'Authorise',
@@ -46,65 +45,50 @@
       return {
         ...mapState,
         signMode: 'sign_in',
-        controller: {
-          auth: new AuthController(),
-        },
         userForm: {
           email: null,
           password: null,
           name: null,
         },
-        isAuthorisationInProgress: false,
+        authorisation: {
+          isAuthorisationInProgress: false,
+          isAuthorisationError: false,
+          errorMessage: null,
+        },
       };
     },
-    watched: {
-    },
     methods: {
-      ...mapActions([
-      ]),
-      ...mapMutations([
-        'removeUser',
-        'setUser',
-      ]),
+      ...mapMutations({
+        mutateUser: 'mutateUser',
+      }),
       ...mapGetters([
         'isAuthorised',
+        'getAuth',
       ]),
       logout() {
-        this.removeUser();
+        this.getAuth().logout()
+          .then(() => {
+            this.mutateUser(null);
+          });
       },
       isSignUpMode() {
         return this.signMode === 'sign_up';
       },
       login() {
+        this.clearAuthErrorState();
         this.isAuthorisationInProgress = true;
-        this.controller.auth.login(
+        this.getAuth().login(
           this.userForm.email,
           this.userForm.password,
         )
-          .then(user => new Promise((resolve, reject) => {
-            // {
-            // uid: '3t6rdpQElhRIoDqgVmYY1BDCh5X2',
-            //   displayName: 'arnoid',
-            //   photoURL: null,
-            //   email: 'stratoangel@gmail.com',
-            //   emailVerified: false,
-            //   phoneNumber: null,
-            //   isAnonymous: false,
-            //   metadata: {
-            //       lastSignInTime: 'Thu, 02 Nov 2017 11:08:04 GMT',
-            //       creationTime: 'Thu, 02 Nov 2017 11:08:04 GMT'
-            //     }
-            // }
-            if (user.emailVerified) {
-              resolve(user);
-            } else {
-              reject('User is not Verified');
-            }
-          }))
           .then((user) => {
-            this.$store.commit('setUser', user);
+            this.mutateUser(user);
+          })
+          .then(() => {
+            this.$router.push('/');
           })
           .catch((error) => {
+            this.setAuthErrorState(error.message);
             console.error(error);
           })
           .then(() => {
@@ -112,21 +96,34 @@
           });
       },
       createUser() {
-        this.isAuthorisationInProgress = true;
-        this.controller.auth.createUser({
+        this.clearAuthErrorState();
+        this.authorisation.isAuthorisationInProgress = true;
+        this.getAuth().createUser({
           userName: this.userForm.name,
           userEmail: this.userForm.email,
           password: this.userForm.password,
         })
-          .then((user) => {
-            this.$store.commit('setUser', user);
+          .then(() => {
+            this.mutateUser(null);
+          })
+          .then(() => {
+            this.$router.push('/');
           })
           .catch((error) => {
+            this.setAuthErrorState(error.message);
             console.error(error);
           })
           .then(() => {
-            this.isAuthorisationInProgress = false;
+            this.authorisation.isAuthorisationInProgress = false;
           });
+      },
+      clearAuthErrorState() {
+        this.authorisation.errorMessage = null;
+        this.authorisation.isAuthorisationError = false;
+      },
+      setAuthErrorState(message) {
+        this.authorisation.errorMessage = message;
+        this.authorisation.isAuthorisationError = true;
       },
     },
 

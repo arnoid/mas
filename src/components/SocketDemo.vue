@@ -1,13 +1,11 @@
 <template>
-  <div class="hello">
+  <div>
     <h1>Socket demo</h1>
     <button v-on:click="call()">call</button>
   </div>
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
-
   export default {
     name: 'SocketDemo',
     data() {
@@ -16,14 +14,7 @@
       };
     },
     methods: {
-      ...mapActions([
-        'signInWithEmailAndPassword',
-      ]),
       call() {
-        this.signInWithEmailAndPassword({
-          useremail: 'user@gmail.com',
-          password: 'password',
-        });
       },
     },
   };

@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import HelloWorld from '@/components/HelloWorld';
+import Home from '@/components/Home';
 import SocketDemo from '@/components/SocketDemo';
 import Authorise from '@/components/Authorise';
+import UserProfile from '@/components/user/UserProfile';
 
 import store from '../store';
 
@@ -13,8 +14,8 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: HelloWorld,
+      name: 'Home',
+      component: Home,
     },
     {
       path: '/authorise',
@@ -22,7 +23,15 @@ const router = new VueRouter({
       component: Authorise,
     },
     {
-      path: '/io',
+      path: '/profile',
+      name: 'UserProfile',
+      component: UserProfile,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/socket',
       name: 'Socket',
       component: SocketDemo,
       meta: {
@@ -33,6 +42,10 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  console.log(to);
+  console.log(`~~~~~~~~~~~ ${to.meta.requiresAuth}`);
+  console.log(`~~~~~~~~~~~ ${!store.getters.isAuthorised}`);
+  console.log(`~~~~~~~~~~~ ${to.meta.requiresAuth && !store.getters.isAuthorised}`);
   if (to.meta.requiresAuth && !store.getters.isAuthorised) {
     router.push({ path: '/authorise' });
   } else {

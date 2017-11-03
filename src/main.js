@@ -3,7 +3,6 @@
 import Vue from 'vue';
 import VueSocketio from 'vue-socket.io';
 import VueFire from 'vuefire';
-import firebase from 'firebase';
 import App from '@/App';
 import router from './router';
 import store from './store';
@@ -17,16 +16,6 @@ const config = {
 
 Vue.use(VueFire);
 Vue.use(VueSocketio, config.socket.host, store);
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyCJd18RupDoMAQ_If-m-uRy6N263nr-Zlk',
-  authDomain: 'merc-as.firebaseapp.com',
-  databaseURL: 'https://merc-as.firebaseio.com',
-  projectId: 'merc-as',
-  storageBucket: '',
-  messagingSenderId: '341948203819',
-};
-firebase.initializeApp(firebaseConfig);
 
 Vue.config.productionTip = false;
 
