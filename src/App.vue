@@ -1,7 +1,8 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+  <div>
+    <div id="app">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -19,6 +20,25 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+  }
+
+  #navbar {
+    height: 60px;
+    min-height: 100%;
+    position: relative;
+    background-color: #4a148c;
+    padding: 5px;
+    display: block;
+  }
+
+  #navbar-logo {
+    float: left;
+    width: 50px;
+    height: 100%;
+  }
+
+  #navbar-title {
+    color: white;
+    text-align: center;
   }
 </style>

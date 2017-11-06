@@ -42,10 +42,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(`~~~~~~~~~~~ ${to.meta.requiresAuth}`);
-  console.log(`~~~~~~~~~~~ ${!store.getters.isAuthorised}`);
-  console.log(`~~~~~~~~~~~ ${to.meta.requiresAuth && !store.getters.isAuthorised}`);
   if (to.meta.requiresAuth && !store.getters.isAuthorised) {
     router.push({ path: '/authorise' });
   } else {

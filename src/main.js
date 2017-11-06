@@ -7,12 +7,7 @@ import App from '@/App';
 import router from './router';
 import store from './store';
 import sockets from './sockets';
-
-const config = {
-  socket: {
-    host: 'http://localhost:9999',
-  },
-};
+import config from './config';
 
 Vue.use(VueFire);
 Vue.use(VueSocketio, config.socket.host, store);

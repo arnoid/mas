@@ -1,11 +1,14 @@
 import firebase from 'firebase';
 import firebaseConfig from '../firebase-config';
+import ApiController from './ApiController';
 
 export default class AuthController {
 
   constructor() {
     firebase.initializeApp(firebaseConfig);
     this.firebase = firebase;
+
+    this.apiController = new ApiController();
   }
 
   login(userEmail, password) {
@@ -26,12 +29,27 @@ export default class AuthController {
         }
       }))
       .then(user => user.getIdToken())
-      .then((token) => {
+      .then(token => new Promise((resolve, reject) => {
         const currentUser = this.firebase.auth().currentUser;
         currentUser.securityToken = token;
 
-        return AuthController.mapUser(currentUser);
-      });
+        this.apiController.registerToken(token)
+          .then((securityToken) => {
+            currentUser.securityToken = securityToken;
+            resolve(AuthController.mapUser(currentUser));
+            return securityToken;
+          })
+          .then((securityToken) => {
+            this.apiController.setSecurityToken(securityToken);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject({
+              code: 'auth/token-not-valid',
+              message: 'User token was not validated on backend',
+            });
+          });
+      }));
   }
 
   logout() {
@@ -50,7 +68,8 @@ export default class AuthController {
       .then(user => user.sendEmailVerification());
   }
 
-  static mapUser(user) {
+  static
+  mapUser(user) {
     let result;
 
     if (user) {
@@ -58,7 +77,7 @@ export default class AuthController {
         displayName: user.displayName,
         emailVerified: user.emailVerified,
         photoURL: user.photoURL,
-        token: user.securityToken,
+        securityToken: user.securityToken,
       };
     } else {
       result = null;
@@ -69,11 +88,11 @@ export default class AuthController {
     return result;
   }
 
-  // reauthenticate({ userEmail, password }) {
-  //   const user = firebase.auth().currentUser;
-  //   const credential = firebase.auth.EmailAuthProvider.credential(userEmail, password);
-  //
-  //   return user.reauthenticateWithCredential(credential);
-  // }
+// reauthenticate({ userEmail, password }) {
+//   const user = firebase.auth().currentUser;
+//   const credential = firebase.auth.EmailAuthProvider.credential(userEmail, password);
+//
+//   return user.reauthenticateWithCredential(credential);
+// }
 
 }

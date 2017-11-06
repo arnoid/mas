@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h1>Authorise</h1>
+    <div id="navbar">
+      <img src="../assets/airplane.svg" id="navbar-logo">
+      <h1 id="navbar-title">Authorise</h1>
+    </div>
 
     <p v-if="authorisation.isAuthorisationError">{{ authorisation.errorMessage }}</p>
     <div v-if="authorisation.isAuthorisationInProgress">
@@ -10,12 +13,12 @@
       <button v-on:click="logout()">Logout</button>
     </div>
     <div v-else>
-      <input type="radio" id="Sign-in" value="sign_in" v-model="signMode">
-      <label for="Sign-in">Sign-in</label>
-      <br>
-      <input type="radio" id="Sign-up" value="sign_up" v-model="signMode">
-      <label for="Sign-up">Sign-up</label>
-      <br>
+      <div>
+        <input type="radio" id="Sign-in" value="sign_in" v-model="signMode">
+        <label for="Sign-in">Sign-in</label>
+        <input type="radio" id="Sign-up" value="sign_up" v-model="signMode">
+        <label for="Sign-up">Sign-up</label>
+      </div>
 
       <div v-if="isSignUpMode()">
         <label for="txt-name">Name</label>

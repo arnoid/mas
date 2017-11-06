@@ -18,7 +18,7 @@ export default new Vuex.Store({
   },
   getters: {
     isAuthorised(state) {
-      return Boolean(state.user.currentUser);
+      return state.user && state.user.currentUser && state.user.currentUser.securityToken;
     },
     getAuth() {
       return authController;
